@@ -1,7 +1,11 @@
 package querybuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Query {
-    private final String columnNames;
+    private List<String> columnNames;
     private final String table;
     private final String condition;
     private final String groupByColumns;
@@ -11,47 +15,60 @@ public class Query {
         this.columnNames = builder.columnNames;
         this.table = builder.table;
         this.condition = builder.condition;
-        this.groupByColumns = builder.groupByColumns;
-        this.orderByColumns = builder.orderByColumns;
+        this.groupByColumns = builder.groupByColumn;
+        this.orderByColumns = builder.orderByColumn;
     }
 
 
     public static class Builder {
-        private String columnNames = "";
+        private List<String> columnNames = new ArrayList<>();
         private String table = "";
         private String condition = "";
-        private String groupByColumns = "";
-        private String orderByColumns = "";
+        private String groupByColumn = "";
+        private String orderByColumn = "";
 
         public Builder select(final String columnNames) {
-            this.columnNames = columnNames;
+            // to-do: each clause should be a Clause Object that also has a builder and determines possible chained clauses
+            if (!this.columnNames.isEmpty()) duplicatedClause("SELECT");
+            this.columnNames = Arrays.asList(columnNames.replaceAll("\\s", "").split(","));
             return this;
         }
 
         public Builder from(final String table) {
+            if (!this.table.isEmpty()) duplicatedClause("FROM");
             this.table = table;
             return this;
         }
 
         public Builder where(final String condition) {
+            // to-do: create Condition with it's builder and provide it here instead of String
+            if (!this.condition.isEmpty()) duplicatedClause("WHERE");
             this.condition = condition;
             return this;
         }
 
-        public Builder groupBy(final String groupByColumns) {
-            this.groupByColumns = groupByColumns;
+        public Builder groupBy(final String groupByColumn) {
+            if (!this.groupByColumn.isEmpty()) duplicatedClause("GROUP BY");
+            validateColumn(groupByColumn);
+            this.groupByColumn = groupByColumn;
             return this;
         }
 
-        public Builder orderBy(final String orderByColumns) {
-            this.orderByColumns = orderByColumns;
+        public Builder orderBy(final String orderByColumn) {
+            if (!this.orderByColumn.isEmpty()) duplicatedClause("ORDER BY");
+            validateColumn(orderByColumn);
+            this.orderByColumn = orderByColumn;
             return this;
         }
 
         public String build() {
             StringBuilder sb = new StringBuilder();
 
-            if (!columnNames.isEmpty()) sb.append("SELECT ").append(columnNames);
+            if (!columnNames.isEmpty()) {
+                final String columns = columnNames.toString();
+                final String names = columns.substring(1,columns.length() - 1);
+                sb.append("SELECT ").append(names);
+            }
             else fail("Required 'select' clause not provided");
 
             if (!table.isEmpty()) sb.append(" FROM ").append(table);
@@ -59,11 +76,20 @@ public class Query {
 
             if (!condition.isEmpty()) sb.append(" WHERE ").append(condition);
 
-            if (!orderByColumns.isEmpty()) sb.append(" ORDER BY ").append(orderByColumns);
+            if (!orderByColumn.isEmpty()) sb.append(" ORDER BY ").append(orderByColumn);
 
-            if (!groupByColumns.isEmpty()) sb.append(" GROUP BY ").append(groupByColumns);
+            if (!groupByColumn.isEmpty()) sb.append(" GROUP BY ").append(groupByColumn);
 
             return sb.append(';').toString();
+        }
+
+        private void duplicatedClause(final String clause) {
+            fail(String.format(clause, "There can't be multiple %s clauses"));
+        }
+
+        private void validateColumn(final String column) {
+            if (!columnNames.contains(column) && !columnNames.contains("*"))
+                fail(String.format(column, "%s column is not in the table"));
         }
 
         private void fail(final String message) {
