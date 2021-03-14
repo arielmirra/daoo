@@ -22,9 +22,11 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:29.0-jre")
+    implementation("com.intellij:annotations:16.0.2")
+    implementation(fileTree("libs"))
 }
 
 application {
     // Define the main class for the application.
-    mainClass.set("sql.queries.builder.App")
+//    mainClass.set("sql.queries.builder.App")
 }
