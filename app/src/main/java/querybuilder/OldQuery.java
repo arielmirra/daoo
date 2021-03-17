@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Query {
+public class OldQuery {
     private List<String> columnNames;
     private final String table;
     private final String condition;
     private final String groupByColumns;
     private final String orderByColumns;
 
-    private Query(Builder builder) {
+    private OldQuery(Builder builder) {
         this.columnNames = builder.columnNames;
         this.table = builder.table;
         this.condition = builder.condition;
