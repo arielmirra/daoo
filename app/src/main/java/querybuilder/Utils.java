@@ -51,21 +51,18 @@ public class Utils {
         }
 
         public QueryBuilder orderBy(Column<?> col) {
-            if (!Arrays.stream(columns).anyMatch(c -> c.equals(col))) {
-                this.orderByColumn = col;
-                return this;
-            } else throw new RuntimeException("Column provided is not in the table");
+            this.orderByColumn = col;
+            return this;
         }
 
         public QueryBuilder groupBy(Column<?> col) {
-            if (!Arrays.stream(columns).anyMatch(c -> c.equals(col))) {
-                this.groupByColumn = col;
-                return this;
-            } else throw new RuntimeException("Column provided is not in the table");
+            this.groupByColumn = col;
+            return this;
         }
 
         public Query build() {
             // TODO: Build the actual Query object.
+            // TODO: Call the QueryValidatorVisitor to inspect Query validity.
             return null;
         }
     }
