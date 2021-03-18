@@ -5,6 +5,8 @@ import daoo.query.Table;
 import daoo.query.visitor.Visitor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TableImpl implements Table {
@@ -13,11 +15,18 @@ public class TableImpl implements Table {
 
     public TableImpl(final String name) {
         this.name = name;
+        this.columns = new ArrayList<>();
+    }
+
+    public TableImpl(final String name, Column<?>... columns) {
+        this.name = name;
+        this.columns = Arrays.asList(columns.clone());
     }
 
     @Override
     public <Col extends Column<Type>, Type extends Comparable<Type>> Col col(Col col) {
-        return null;
+        this.columns.add(col);
+        return col;
     }
 
     @NotNull

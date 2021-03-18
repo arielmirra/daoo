@@ -1,18 +1,13 @@
 package querybuilder;
 
-import daoo.query.Column;
-import daoo.query.Criteria;
-import daoo.query.Query;
-import daoo.query.Table;
-import querybuilder.implementations.IntColumn;
-import querybuilder.implementations.StrColumn;
-import querybuilder.implementations.TableImpl;
-
-import java.util.Arrays;
+import daoo.query.*;
+import daoo.query.clause.*;
+import querybuilder.implementations.*;
+import querybuilder.implementations.visitors.QueryValidatorVisitor;
 
 public class Builder {
 
-    public static Table table(final String name) {
+    public static TableImpl table(final String name) {
         return new TableImpl(name);
     }
 
@@ -30,39 +25,55 @@ public class Builder {
 
 
     public static class QueryBuilder {
-        private Column<?>[] columns;
-        private Table table;
-        private Column<?> orderByColumn;
-        private Column<?> groupByColumn;
+        private QueryValidatorVisitor validator = new QueryValidatorVisitor();
+        private SelectClause select;
+        private FromClause from;
+        private WhereClause where;
+        private OrderByClause orderBy;
+        private GroupByClause groupBy;
 
         public QueryBuilder select(Column<?>... columns) {
-            this.columns = columns.clone();
+            this.select = new SelectClauseImpl(columns);
             return this;
         }
 
         public QueryBuilder from(final Table table) {
-            this.table = table;
+            this.from = new FromClauseImpl(table);
             return this;
         }
 
         public QueryBuilder where(final Criteria criteria) {
+            this.where = new WhereClauseImpl(criteria);
             return this;
         }
 
         public QueryBuilder orderBy(Column<?> col) {
-            this.orderByColumn = col;
+            this.orderBy = new OrderByClauseImpl(col);
             return this;
         }
 
         public QueryBuilder groupBy(Column<?> col) {
-            this.groupByColumn = col;
+            this.groupBy = new GroupByClauseImpl(col);
             return this;
         }
 
         public Query build() {
             // TODO: Build the actual Query object.
             // TODO: Call the QueryValidatorVisitor to inspect Query validity.
-            return null;
+
+            ClauseImpl<?>[] clauses = {
+                    new ClauseImpl<SelectClause>(select),
+                    new ClauseImpl<FromClause>(from),
+                    new ClauseImpl<WhereClause>(where),
+                    new ClauseImpl<OrderByClause>(orderBy),
+                    new ClauseImpl<GroupByClause>(groupBy),
+            };
+
+            QueryImpl query = new QueryImpl(clauses);
+
+            validator.visit(query);
+
+            return query;
         }
     }
 

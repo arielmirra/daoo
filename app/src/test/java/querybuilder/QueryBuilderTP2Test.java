@@ -11,7 +11,7 @@ public class QueryBuilderTP2Test {
 
     @Test
     public void createQueryTest() {
-        final Table t = table("student");
+        final TableImpl t = table("student");
         final StrColumn lastName = t.col(string("lastName"));
         final StrColumn fistName = t.col(string("firstName"));
         final IntColumn age = t.col(integer("age"));
