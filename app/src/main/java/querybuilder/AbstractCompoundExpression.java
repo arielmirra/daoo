@@ -15,11 +15,11 @@ abstract class AbstractCompoundExpression<T> implements CompoundExpression<T> {
 
     @Override
     public Operator getOperator() {
-        return null;
+        return operator;
     }
 
     @Override
     public Expression<?>[] getOperands() {
-        return null;
+        return operands;
     }
 }

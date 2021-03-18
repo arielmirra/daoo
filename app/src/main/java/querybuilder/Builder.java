@@ -10,7 +10,7 @@ import querybuilder.implementations.TableImpl;
 
 import java.util.Arrays;
 
-public class Utils {
+public class Builder {
 
     public static Table table(final String name) {
         return new TableImpl(name);
@@ -46,7 +46,6 @@ public class Utils {
         }
 
         public QueryBuilder where(final Criteria criteria) {
-            this.table = table;
             return this;
         }
 

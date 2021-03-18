@@ -70,4 +70,13 @@ public class QueryValidatorVisitor implements Visitor {
     public void visit(@NotNull UsingClause clause) {
 
     }
+
+//    private void duplicatedClause(final String clause) {
+//        fail(String.format(clause, "There can't be multiple %s clauses"));
+//    }
+//
+//    private void validateColumn(final String column) {
+//        if (!columnNames.contains(column) && !columnNames.contains("*"))
+//            fail(String.format(column, "%s column is not in the table"));
+//    }
 }

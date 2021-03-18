@@ -2,7 +2,7 @@ package querybuilder;
 
 import org.junit.Test;
 
-import static querybuilder.Utils.*;
+import static querybuilder.Builder.*;
 
 import daoo.query.*;
 import querybuilder.implementations.*;

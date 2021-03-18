@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="daoo-sql-src">
-    <CLASSES />
-    <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/app/libs/daoo-sql-src.jar!/" />
-    </SOURCES>
-  </library>
-</component>
