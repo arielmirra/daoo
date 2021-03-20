@@ -24,6 +24,7 @@ dependencies {
     implementation("com.google.guava:guava:29.0-jre")
     compileOnly("org.jetbrains:annotations:20.1.0")
     implementation(fileTree("libs"))
+    implementation("com.google.code.gson:gson:2.8.6")
 }
 
 application {

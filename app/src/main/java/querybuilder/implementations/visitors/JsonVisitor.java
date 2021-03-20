@@ -1,16 +1,17 @@
 package querybuilder.implementations.visitors;
 
+import com.google.gson.*;
 import daoo.query.*;
 import daoo.query.clause.*;
-import daoo.query.visitor.Visitor;
 import org.jetbrains.annotations.NotNull;
+import querybuilder.NumericCompoundExpression;
 
-public class JsonVisitor implements Visitor {
+public class JsonVisitor implements QueryVisitor {
+    private JsonObject json = new JsonObject();
 
-
-    @Override
-    public void visit(@NotNull Query query) {
-
+    public String print(@NotNull Query query) {
+        // todo: build an serialize a JSON Object.
+        return "";
     }
 
     @Override
@@ -25,8 +26,19 @@ public class JsonVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull Constant<?> constant) {
+        final var value = constant.getValue();
+        if (value instanceof Integer) {}
+        if (value instanceof String) {}
 
     }
+
+    private void visit(Expression<?> exp) {
+        if (exp instanceof NumericCompoundExpression) this.visit((NumericCompoundExpression) exp);
+        if (exp instanceof Criteria) this.visit((Criteria) exp);
+        if (exp instanceof Column<?>) this.visit((Column<?>) exp);
+        if (exp instanceof Constant) this.visit((Constant<?>) exp);
+    }
+
 
     @Override
     public void visit(@NotNull CompoundExpression<?> expression) {
@@ -40,6 +52,7 @@ public class JsonVisitor implements Visitor {
 
     @Override
     public void visit(@NotNull SelectClause clause) {
+
 
     }
 
