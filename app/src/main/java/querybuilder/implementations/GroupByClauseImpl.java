@@ -14,6 +14,6 @@ public class GroupByClauseImpl implements GroupByClause {
 
     @Override
     public Stream<Column<?>> component() {
-        return null;
+        return Stream.of(col);
     }
 }

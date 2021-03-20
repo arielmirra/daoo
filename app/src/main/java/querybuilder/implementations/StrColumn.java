@@ -10,7 +10,7 @@ public class StrColumn extends ColumnImpl<String> {
     }
 
     public Criteria startsWith(String str) {
-        return new Criteria(DefaultOperator.LIKE, Constant.constant(str + "%"));
+        return new Criteria(DefaultOperator.LIKE, this, Constant.constant(str + "%"));
     }
 
     public NumericCompoundExpression length() {

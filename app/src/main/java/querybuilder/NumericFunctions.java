@@ -12,10 +12,10 @@ public interface NumericFunctions extends Expression<Integer> {
     }
 
     default Criteria between(final Expression<Integer> min, final Expression<Integer> max) {
-        return new Criteria(DefaultOperator.BETWEEN, Constant.constant(min), Constant.constant(max));
+        return new Criteria(DefaultOperator.BETWEEN, this, Constant.constant(min), Constant.constant(max));
     }
 
     default Criteria between(final int min, final int max) {
-        return between(Constant.constant(min), Constant.constant(max));
+        return new Criteria(DefaultOperator.BETWEEN, this, Constant.constant(min), Constant.constant(max));
     }
 }

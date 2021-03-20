@@ -58,15 +58,12 @@ public class Builder {
         }
 
         public Query build() {
-            // TODO: Build the actual Query object.
-            // TODO: Call the QueryValidatorVisitor to inspect Query validity.
-
             ClauseImpl<?>[] clauses = {
-                    new ClauseImpl<SelectClause>(select),
-                    new ClauseImpl<FromClause>(from),
-                    new ClauseImpl<WhereClause>(where),
-                    new ClauseImpl<OrderByClause>(orderBy),
-                    new ClauseImpl<GroupByClause>(groupBy),
+                    new ClauseImpl<>(select),
+                    new ClauseImpl<>(from),
+                    new ClauseImpl<>(where),
+                    new ClauseImpl<>(orderBy),
+                    new ClauseImpl<>(groupBy),
             };
 
             QueryImpl query = new QueryImpl(clauses);

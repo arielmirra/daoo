@@ -14,6 +14,6 @@ public class OrderByClauseImpl implements OrderByClause {
 
     @Override
     public Stream<Column<?>> component() {
-        return null;
+        return Stream.of(col);
     }
 }
