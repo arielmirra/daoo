@@ -14,8 +14,10 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
-	compileOnly("org.jetbrains:annotations:20.1.0")
-	testImplementation("junit:junit:4.13")
+	compileOnly 'org.jetbrains:annotations:20.1.0'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+	compile 'com.github.stefanbirkner:system-lambda:1.2.0'
 	implementation fileTree("libs")
 }
 
