@@ -20,7 +20,8 @@ public class OperandStackImpl implements OperandStack, Cloneable {
 
     @Override                 // EmptyStackException?
     public Result pop() throws NoSuchElementException {
-        return new ResultImpl(operandStack.pop(), new OperandStackImpl(operandStack));
+        Stack<Operand> tempStack = clone();
+        return new ResultImpl(tempStack.pop(), new OperandStackImpl(tempStack));
     }
 
     @Override
@@ -30,7 +31,7 @@ public class OperandStackImpl implements OperandStack, Cloneable {
 
     @Override
     public OperandStack push(@NotNull Operand operand) {
-        Stack<Operand> tempStack = (Stack<Operand>) operandStack.clone();
+        Stack<Operand> tempStack = clone();
         tempStack.push(operand);
         return new OperandStackImpl(tempStack);
     }
@@ -38,6 +39,11 @@ public class OperandStackImpl implements OperandStack, Cloneable {
     @Override
     public boolean isEmpty() {
         return operandStack.isEmpty();
+    }
+
+    @Override
+    protected Stack<Operand> clone() {
+        return (Stack<Operand>) operandStack.clone();
     }
 
     public class ResultImpl implements Result {

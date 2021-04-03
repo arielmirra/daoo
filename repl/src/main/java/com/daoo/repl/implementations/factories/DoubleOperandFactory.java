@@ -1,5 +1,6 @@
 package com.daoo.repl.implementations.factories;
 
+import com.daoo.repl.implementations.operands.DoubleOperand;
 import daoo.repl.Factory;
 import daoo.repl.Operand;
 import org.jetbrains.annotations.NotNull;
@@ -18,28 +19,6 @@ public class DoubleOperandFactory implements Factory<Operand> {
             return true;
         } catch (NumberFormatException e) {
             return false;
-        }
-    }
-
-    public class DoubleOperand implements Operand {
-        private final Double value;
-
-        public DoubleOperand(Double value) {
-            this.value = value;
-        }
-
-        @Override
-        public <T> T as(@NotNull Class<T> type) {
-            if(Double.class.equals(type)) {
-                //noinspection unchecked
-                return (T) value;
-            }
-            throw new ClassCastException();
-        }
-
-        @Override
-        public String print() {
-            return String.valueOf(value);
         }
     }
 }
