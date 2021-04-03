@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
-public class OperandStackImpl implements OperandStack {
+public class OperandStackImpl implements OperandStack, Cloneable {
     private Stack<Operand> operandStack;
 
     public OperandStackImpl() {
@@ -30,8 +30,9 @@ public class OperandStackImpl implements OperandStack {
 
     @Override
     public OperandStack push(@NotNull Operand operand) {
-        operandStack.push(operand);
-        return new OperandStackImpl(operandStack);
+        Stack<Operand> tempStack = (Stack<Operand>) operandStack.clone();
+        tempStack.push(operand);
+        return new OperandStackImpl(tempStack);
     }
 
     @Override
@@ -43,19 +44,19 @@ public class OperandStackImpl implements OperandStack {
         private Operand element;
         private OperandStack tail;
 
-        public ResultImpl(Operand element,OperandStack tail) {
+        public ResultImpl(Operand element, OperandStack tail) {
             this.element = element;
             this.tail = tail;
         }
 
         @Override
         public Operand element() {
-            return null;
+            return element;
         }
 
         @Override
         public OperandStack tail() {
-            return null;
+            return tail;
         }
     }
 }
