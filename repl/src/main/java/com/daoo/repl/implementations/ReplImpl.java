@@ -32,14 +32,35 @@ public class ReplImpl extends Repl {
         String line;
         while((line = scanner.nextLine()) != null) {
             switch (line) {
-//                case "undo" -> undo(out);
-//                case "redo" -> redo(out);
-                default -> environment.evaluate(line);
+                case "undo" -> undo(out);
+                case "redo" -> redo(out);
+                default -> {
+                    final Command c = environment.evaluate(line);
+                    undos.push(c);
+                    environment.execute(c);
+                }
             }
+            print(out);
         }
 
+    }
+
+    private void undo(PrintStream out) {
+        final Command c = undos.pop();
+        environment.undo(c);
+        redos.push(c);
+    }
+
+    private void redo(PrintStream out) {
+        final Command c = redos.pop();
+        environment.execute(c);
+        undos.push(c);
+    }
+
+    private void print(PrintStream out) {
         out.println(environment.stack().peek().print());
     }
+
 
     public static void main(String[] args) {
         final Environment e = new EnvironmentImpl();
