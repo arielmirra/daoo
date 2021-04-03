@@ -1,5 +1,6 @@
 package com.daoo.repl.implementations;
 
+import com.daoo.repl.implementations.commands.PushCommand;
 import daoo.repl.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,12 @@ public class EnvironmentImpl implements Environment {
         this.operandStack = new OperandStackImpl();
     }
 
+    public EnvironmentImpl(List<Factory<Operand>> operandFactories, List<Factory<Command>> commandFactories) {
+        this.operandFactories = operandFactories;
+        this.commandFactories = commandFactories;
+        this.operandStack = new OperandStackImpl();
+    }
+
     @Override
     public void addOperandFactory(@NotNull Factory<Operand> factory) {
         operandFactories.add(factory);
@@ -30,24 +37,29 @@ public class EnvironmentImpl implements Environment {
     @NotNull
     @Override
     public Command evaluate(@NotNull String input) {
-        // todo: return push command for operands or commands testing the input with the factories
-        return null;
+        for (Factory<Operand> factory : operandFactories)
+            if (factory.test(input)) return new PushCommand(factory.apply(input));
+
+        for (Factory<Command> factory : commandFactories)
+            if (factory.test(input)) return factory.apply(input);
+
+        return Command.EMPTY_COMMAND;
     }
 
     @Override
     public void execute(@NotNull Command command) {
-
+        operandStack = command.execute(operandStack);
     }
 
     @Override
     public void undo(@NotNull Command command) {
-
+        operandStack = command.undo();
     }
 
     @NotNull
     @Override
     public Environment copy() {
-        return this;
+        return new EnvironmentImpl(operandFactories, commandFactories);
     }
 
     @Override
