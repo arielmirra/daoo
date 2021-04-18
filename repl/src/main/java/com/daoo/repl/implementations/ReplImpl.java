@@ -30,17 +30,18 @@ public class ReplImpl extends Repl {
         final PrintStream out = new PrintStream(output);
         final Scanner scanner = new Scanner(input);
         String line;
-        while((line = scanner.nextLine()) != null) {
+        while ((line = scanner.nextLine()) != null) {
             switch (line) {
                 case "undo" -> undo(out);
                 case "redo" -> redo(out);
+                case "" -> {continue;}
                 default -> {
                     final Command c = environment.evaluate(line);
                     undos.push(c);
                     environment.execute(c);
                 }
             }
-            print(out);
+            out.println(environment.stack().peek().print());
         }
 
     }
@@ -57,19 +58,14 @@ public class ReplImpl extends Repl {
         undos.push(c);
     }
 
-    private void print(PrintStream out) {
-        out.println(environment.stack().peek().print());
-    }
-
-
     public static void main(String[] args) {
-        final Environment e = new EnvironmentImpl();
-        e.addOperandFactory(new DoubleOperandFactory());
-        e.addOperandFactory(new LiteralOperandFactory());
-        e.addCommandFactory(new BinaryArithmeticCommandFactory());
-        e.addCommandFactory(new LengthCommandFactory());
+        final Environment env = new EnvironmentImpl();
+        env.addOperandFactory(new DoubleOperandFactory());
+        env.addOperandFactory(new LiteralOperandFactory());
+        env.addCommandFactory(new BinaryArithmeticCommandFactory());
+        env.addCommandFactory(new LengthCommandFactory());
 
-        final Repl repl = new ReplImpl(e);
+        final Repl repl = new ReplImpl(env);
         repl.loop(System.in, System.out);
     }
 }
