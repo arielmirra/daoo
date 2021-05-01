@@ -18,6 +18,8 @@ dependencies {
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 	compile 'com.github.stefanbirkner:system-lambda:1.2.0'
+	compile 'com.pholser:junit-quickcheck-core:0.9'
+	compile 'com.pholser:junit-quickcheck-generators:0.9'
 	implementation fileTree("libs")
 }
 
