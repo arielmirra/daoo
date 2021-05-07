@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.regex.Pattern;
 
 public class SaveVarCommandFactory implements CommandFactory {
+    // env?
+    // registry?
+
     @NotNull
     @Override
     public Command apply(@NotNull String line) {

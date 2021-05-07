@@ -26,7 +26,7 @@ class ReplApplicationTests {
         e.addCommandFactory(new BinaryArithmeticCommandFactory());
         e.addCommandFactory(new LengthCommandFactory());
 
-        repl = new ReplImpl(e);
+//        repl = new ReplImpl(e);
     }
 
     @Test
