@@ -16,20 +16,17 @@ public class EnvironmentImpl implements Environment {
     private List<Factory<Operand>> operandFactories;
     private List<Factory<Command>> commandFactories;
     private OperandStack operandStack;
-    private Map<String, Operand> variables;
 
     public EnvironmentImpl() {
         this.operandFactories = new ArrayList<>();
         this.commandFactories = new ArrayList<>();
         this.operandStack = new OperandStackImpl();
-        this.variables = new HashMap<>();
     }
 
     public EnvironmentImpl(List<Factory<Operand>> operandFactories, List<Factory<Command>> commandFactories) {
         this.operandFactories = operandFactories;
         this.commandFactories = commandFactories;
         this.operandStack = new OperandStackImpl();
-        this.variables = new HashMap<>();
     }
 
     @Override
@@ -45,19 +42,6 @@ public class EnvironmentImpl implements Environment {
     @NotNull
     @Override
     public Command evaluate(@NotNull String input) {
-        if (variables.containsKey(input)) return push(variables.get(input));
-        if (isVar(input)) {
-            return saveVar(input);
-        } else {
-            return matchFactory(input);
-        }
-    }
-
-    private Command push(Operand operand) {
-        return new PushCommand(operand);
-    }
-
-    private Command matchFactory(String input) {
         for (Factory<Operand> factory : operandFactories)
             if (factory.test(input)) return push(factory.apply(input));
 
@@ -67,28 +51,8 @@ public class EnvironmentImpl implements Environment {
         return Command.EMPTY_COMMAND;
     }
 
-    private Command saveVar(String line) {
-        final String[] terms = line.split("=");
-        final String varName = terms[0];
-        final Operand varValue = getOperand(terms[1]);
-        variables.put(varName, varValue);
-        return push(varValue);
-    }
-
-    private Operand getOperand(String term) {
-        final List<Factory<Operand>> factories =
-                operandFactories.stream().filter(f -> f.test(term)).collect(Collectors.toList());
-        if (factories.size() > 0) {
-            return factories.get(0).apply(term);
-        } else {
-            throw new RuntimeException("Invalid variable expression");
-        }
-    }
-
-    private boolean isVar(String line) {
-        final Pattern pattern = Pattern.compile("\\w\\s*=\\s*\\w", Pattern.CASE_INSENSITIVE);
-        final Matcher matcher = pattern.matcher(line);
-        return matcher.find();
+    private Command push(Operand operand) {
+        return new PushCommand(operand);
     }
 
     @Override

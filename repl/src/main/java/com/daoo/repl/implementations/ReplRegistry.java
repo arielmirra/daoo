@@ -1,9 +1,12 @@
 package com.daoo.repl.implementations;
 
-import daoo.repl.Operand;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class ReplRegistry {
-    Map<String, Operand> variables;
+    /** key = var or function, value = string to evaluate */
+    public Map<String, String> declarations = new HashMap<>();
 }
+
+
+// when invoking functions copy env, apply f, save result into original env.

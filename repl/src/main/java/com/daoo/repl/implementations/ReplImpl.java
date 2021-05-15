@@ -1,29 +1,26 @@
 package com.daoo.repl.implementations;
 
 import com.daoo.repl.Repl;
+import com.daoo.repl.implementations.commands.DeclareCommand;
 import com.daoo.repl.implementations.factories.*;
 import daoo.repl.Command;
 import daoo.repl.Environment;
-import daoo.repl.Operand;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class ReplImpl extends Repl {
     private final Stack<Command> undos;
     private final Stack<Command> redos;
-    ReplRegistry registry;
 
-    public ReplImpl(@NotNull Environment environment, @NotNull ReplRegistry registry) {
+    public ReplImpl(@NotNull Environment environment) {
         super(environment);
         this.undos = new Stack<>();
         this.redos = new Stack<>();
-        this.registry = new ReplRegistry();
     }
 
     @Override
@@ -33,27 +30,35 @@ public class ReplImpl extends Repl {
         String line;
         while ((line = scanner.nextLine()) != null) {
             switch (line) {
-                case "undo" -> undo(out);
-                case "redo" -> redo(out);
-                case "" -> {continue;}
+                case "undo" -> undo();
+                case "redo" -> redo();
+                case "" -> {
+                    continue;
+                }
                 default -> {
                     final Command c = environment.evaluate(line);
                     undos.push(c);
                     environment.execute(c);
                 }
             }
-            out.println(environment.stack().peek().print());
+            printResult(out);
         }
 
     }
 
-    private void undo(PrintStream out) {
+    private void printResult(PrintStream out) {
+        if (!environment.stack().isEmpty() && !undos.isEmpty() && !(undos.peek() instanceof DeclareCommand)) {
+            out.println("> " + environment.stack().peek().print());
+        } else out.println("> ");
+    }
+
+    private void undo() {
         final Command c = undos.pop();
         environment.undo(c);
         redos.push(c);
     }
 
-    private void redo(PrintStream out) {
+    private void redo() {
         final Command c = redos.pop();
         environment.execute(c);
         undos.push(c);
@@ -61,15 +66,16 @@ public class ReplImpl extends Repl {
 
     public static void main(String[] args) {
         final Environment env = new EnvironmentImpl();
-        final ReplRegistry registry = new ReplRegistry();
         env.addOperandFactory(new DoubleOperandFactory());
         env.addOperandFactory(new LiteralOperandFactory());
         env.addCommandFactory(new BinaryArithmeticCommandFactory());
         env.addCommandFactory(new LengthCommandFactory());
+
+        final ReplRegistry registry = new ReplRegistry();
         env.addCommandFactory(new DeclareCommandFactory(registry));
         env.addCommandFactory(new InvokeCommandFactory(env, registry));
 
-        final Repl repl = new ReplImpl(env, registry);
+        final Repl repl = new ReplImpl(env);
         repl.loop(System.in, System.out);
     }
 }
