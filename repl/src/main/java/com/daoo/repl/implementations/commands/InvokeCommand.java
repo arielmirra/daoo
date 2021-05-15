@@ -26,8 +26,6 @@ public class InvokeCommand implements Command {
         this.previous = stack;
         if (isVar(key)) invokeVar();
         else if (isFunction(key)) invokeFunction();
-        else throw new UnsupportedOperationException();
-
         return environment.stack();
     }
 
@@ -48,7 +46,23 @@ public class InvokeCommand implements Command {
     }
 
     private void invokeFunction() {
+        final String value = registry.declarations.get(key);
+        final Environment tempEnv = environment.copy();
 
+        // get function terms
+        final String[] terms = value.split(" ");
+        final String operator = terms[terms.length - 1];
+        final String term2 = terms[terms.length - 2];
+        final String term1 = terms[terms.length - 3];
+
+        // apply function in temp environment
+        tempEnv.execute(tempEnv.evaluate(term1));
+        tempEnv.execute(tempEnv.evaluate(term2));
+        tempEnv.execute(tempEnv.evaluate(operator));
+        var result = tempEnv.stack().peek().as(Double.class);
+
+        // save result into original environment
+        environment.execute(environment.evaluate(result.toString()));
     }
 
     @Override
