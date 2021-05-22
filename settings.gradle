@@ -2,3 +2,5 @@ rootProject.name = 'daoo'
 
 include 'sql-query-utils'
 include 'repl'
+include 'news-stream'
+
