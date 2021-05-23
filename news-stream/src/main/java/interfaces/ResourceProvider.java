@@ -1,3 +1,5 @@
+package interfaces;
+
 import java.time.Duration;
 
 public interface ResourceProvider {
