@@ -24,8 +24,18 @@ public class Article implements Resource {
         return label;
     }
 
+    public String source() {
+        return source;
+    }
+
     @Override
     public String toString() {
         return label + " --> " + link;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        var other = (Article) obj;
+        return other.source.equals(this.source) && other.label.equals(this.label) && other.link.equals(this.link);
     }
 }
