@@ -27,4 +27,16 @@ public class ArticleChange implements ResourceChange {
     public String toString() {
         return article.source() + " " + changeType + ": " + article.label();
     }
+
+    public static ArticleChange added(Article resource) {
+        return new ArticleChange(resource, ChangeType.ADD);
+    }
+
+    public static ArticleChange modified(Article resource) {
+        return new ArticleChange(resource, ChangeType.MODIFY);
+    }
+
+    public static ArticleChange removed(Article resource) {
+        return new ArticleChange(resource, ChangeType.REMOVE);
+    }
 }

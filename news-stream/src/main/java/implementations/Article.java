@@ -4,7 +4,7 @@ import interfaces.Resource;
 
 public class Article implements Resource {
 
-    private String link;
+    private String link; // serves as ID
     private String label;
     private String source;
 
@@ -36,6 +36,6 @@ public class Article implements Resource {
     @Override
     public boolean equals(Object obj) {
         var other = (Article) obj;
-        return other.source.equals(this.source) && other.label.equals(this.label) && other.link.equals(this.link);
+        return other.source.equals(this.source) && other.link.equals(this.link);
     }
 }

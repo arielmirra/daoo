@@ -17,7 +17,7 @@ public class ClarinProvider extends NewsProvider {
                     if (article.select("h2").size() > 0) {
                         var link = article.attr("href");
                         var title = article.select("h2").first().text();
-                        resources.add(new Article(URL + link, title, SOURCE));
+                        resources.add(new Article(URL + link, title, source));
                     }
                 });
     }

@@ -16,7 +16,7 @@ public class LaNacionProvider extends NewsProvider {
                 .forEach(article -> {
                     var link = article.attr("href");
                     var title = article.attr("title");
-                    resources.add(new Article(link, title, SOURCE));
+                    resources.add(new Article(link, title, source));
                 });
     }
 }

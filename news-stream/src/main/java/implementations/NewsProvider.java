@@ -1,6 +1,7 @@
 package implementations;
 
 import interfaces.Resource;
+import interfaces.ResourceChange;
 import interfaces.ResourceProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,17 +10,18 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class NewsProvider implements ResourceProvider {
 
     String URL;
-    String SOURCE;
+    String source;
     Duration duration;
     List<Resource> resources = new ArrayList<>();
 
-    public NewsProvider(String URL, String SOURCE, Duration duration) {
+    public NewsProvider(String URL, String source, Duration duration) {
         this.URL = URL;
-        this.SOURCE = SOURCE;
+        this.source = source;
         this.duration = duration;
     }
 
