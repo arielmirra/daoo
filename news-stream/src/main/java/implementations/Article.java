@@ -36,6 +36,8 @@ public class Article implements Resource {
     @Override
     public boolean equals(Object obj) {
         var other = (Article) obj;
-        return other.source.equals(this.source) && other.link.equals(this.link);
+        return other.source.equals(this.source)
+                && other.link.equals(this.link)
+                && other.label.equals(this.label);
     }
 }

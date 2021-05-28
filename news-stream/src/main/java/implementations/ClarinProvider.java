@@ -12,6 +12,7 @@ public class ClarinProvider extends NewsProvider {
 
     @Override
     public void getArticles(Document doc) {
+        System.out.println("ClarinProvider.getArticles");
         doc.select("article a")
                 .forEach(article -> {
                     if (article.select("h2").size() > 0) {
