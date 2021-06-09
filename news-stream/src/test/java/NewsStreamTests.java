@@ -7,9 +7,6 @@ import interfaces.ResourceChange;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.Flow;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
